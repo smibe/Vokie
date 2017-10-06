@@ -1,6 +1,7 @@
-import firebase, { auth, provider, authUi } from './firebase.js';
+import firebase, { auth, provider, authUi, database } from './firebase.js';
 import React, { Component } from 'react';
 import './App.css';
+import Lessons from './Lessons.js'
 
 class App extends Component {
   constructor() {
@@ -17,17 +18,17 @@ class App extends Component {
     <div className="wrapper">
       <div>
       <h1>Vokie - Vokabeltrainer</h1>
-      <ul>
-        <li><a className={this.state.view == "training" ? "active" : "view"}  href='#training' 
+      <ul className="headerList">
+        <li className="headerItem"><a className={this.state.view == "training" ? "active" : "view"}  href='#training' 
             onClick={() =>  this.setState({view: "training"})}>Trainieren</a></li>
-        <li><a className={this.state.view == "lessons" ? "active" : "view"}  href='#lessons' 
+        <li className="headerItem"><a className={this.state.view == "lessons" ? "active" : "view"}  href='#lessons' 
             onClick={() =>  this.setState({view: "lessons"})}>Lektionen</a></li>
       </ul>
       </div>
       {this.state.user ?
-        <img onClick={this.logout} className='user-profile'src={this.state.user.photoURL} />
+        <img onClick={() => this.logout()} className='user-profile'src={this.state.user.photoURL} />
         :
-        <button onClick={this.login}>Anmelden</button>              
+        <button onClick={() => this.login()}>Anmelden</button>              
   } 
   </div>
   </header>
@@ -38,15 +39,7 @@ class App extends Component {
     </div> : null }
   
   { this.state.view == "training" ? <div> Trainieren </div> : null }
-  { this.state.view == "lessons" 
-    ? 
-      <div> 
-        <div>
-        Lektionen
-        </div>
-        <button onClick={this.setState({view: "createLesson"})}>Neu</button> 
-      </div> 
-    : null }
+  { this.state.view == "lessons" ? <Lessons />    : null }
   { this.state.view == "createLesson" ? 
   <div> 
     <div>
